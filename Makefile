@@ -11,6 +11,13 @@ DIST    := dist
 
 all: build test
 
+AGENTS_REPO := https://github.com/benn-herrera/adjagent.git
+AGENTS_DIR := .claude/$(basename $(notdir $(AGENTS_REPO)))
+agents:
+	@mkdir -p $(dir $(AGENTS_DIR))
+	@[[ -d "$(AGENTS_DIR)" ]] && git -C "$(AGENTS_DIR)" pull || git -C "$(dir $(AGENTS_DIR))" clone $(AGENTS_REPO)
+	just --justfile $(AGENTS_DIR)/justfile install "$(CURDIR)"
+
 ## setup: install rustup targets + cargo-zigbuild for cross-compiling.
 ## Requires zig (brew install zig) — zig provides the cross-linker so Rust
 ## cross-compiles from any host (like Go/zig), incl. Mac → Linux/Windows.
