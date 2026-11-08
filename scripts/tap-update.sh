@@ -11,12 +11,13 @@ cd "${script_dir}/.." || exit 1
 
 : "${TAP_DIR:?TAP_DIR is not set: the tap clone location relative to this repository}"
 
-ver="$(cargo run -- --version)"
+ver=v"$(cargo run -- --version)"
 url="https://github.com/benn-herrera/laterm/archive/refs/tags/${ver}.tar.gz"
 sha="$(curl -fsSL "${url}" | shasum -a 256 | cut -d' ' -f1)" || \
   { printf 'ensure laterm tag %s was created and pushed to github\n' "${ver}"; exit 1; }
 f="${TAP_DIR}/Formula/laterm.rb"
-tools/scripts/tap-formula-set.sh "${f}" "${url}" "${sha}"
+scripts/tap-formula-set.sh "${f}" "${url}" "${sha}"
 if ! git -C "${TAP_DIR}" diff --quiet HEAD -- Formula/laterm.rb; then
     git -C "${TAP_DIR}" commit -S -m "laterm ${ver}" -- Formula/laterm.rb
+    git show --show-signature HEAD
 fi
