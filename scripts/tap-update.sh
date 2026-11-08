@@ -27,6 +27,7 @@ url="https://github.com/benn-herrera/${TAP_FORMULA}/archive/refs/tags/${ver}.tar
 sha="$(curl -fsSL "${url}" | shasum -a 256 | cut -d' ' -f1)" || \
   { printf 'ensure %s tag %s was created and pushed to github\n' "${TAP_FORMULA}" "${ver}"; exit 1; }
 "${script_dir}"/tap-formula-set.sh "${f}" "${url}" "${sha}"
+git -C "${TAP_DIR}" pull
 if ! git -C "${TAP_DIR}" diff --quiet HEAD -- Formula/${TAP_FORMULA}.rb; then
     git -C "${TAP_DIR}" commit -S -m "${TAP_FORMULA} ${ver}" -- Formula/${TAP_FORMULA}.rb
     git show --show-signature HEAD
