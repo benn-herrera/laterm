@@ -7,7 +7,7 @@
 #
 # Inputs (environment): TAP_DIR, the tap clone's location relative to this
 # repository's root.
-# Needs macOS tar (bsdtar, for -s), git, go, shasum and brew.
+# Needs macOS tar (bsdtar, for -s), git, cargo, shasum and brew.
 set -euo pipefail
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)" || exit 1
@@ -19,19 +19,18 @@ if [[ ! -f "${src}" ]]; then
   printf 'tap-local: no formula at %s; run `just tap`\n' "${src}" >&2
   exit 1
 fi
-for tool in brew go shasum; do
+for tool in brew cargo shasum; do
   command -v "${tool}" >/dev/null || { printf 'tap-local: %s not on PATH\n' "${tool}" >&2; exit 1; }
 done
 
-version="$(cargo run ./src/main.rs --version)"
-top="laterm-${version}"
-tarball="${PWD}/bin/tap/${top}.tar.gz"
+ver="$(cargo run -- --version)"
+tarball="${PWD}/bin/tap/${ver}.tar.gz"
 formula="${PWD}/bin/tap/laterm.rb"
 mkdir -p "${PWD}/bin/tap"
-git ls-files -z | tar -czf "${tarball}" --null -T - -s ",^,${top}/,"
+git ls-files -z | tar -czf "${tarball}" --null -T - -s ",^,${ver}/,"
 sha="$(shasum -a 256 "${tarball}" | cut -d' ' -f1)"
 cp "${src}" "${formula}"
-tools/scripts/tap-formula-set.sh "${formula}" "file://${tarball}" "${sha}"
+scripts/tap-formula-set.sh "${formula}" "file://${tarball}" "${sha}"
 
 # `brew list --versions` prints nothing and fails only when laterm is not installed.
 if [[ -n "$(brew list --versions laterm || true)" ]]; then

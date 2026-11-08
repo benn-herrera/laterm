@@ -52,7 +52,7 @@ _tag-clean:
 
 [doc("NEEDS a signing key git tag -s can use: create and verify a signed annotated tag v<version>, <version> being go run ./cmd --version; runs no gates, pushes nothing")]
 tag: _tag-clean
-    @ver="v$(cargo run ./src/main.rs --version)"; [[ "${ver}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "tag: version ${ver} is not v<major>.<minor>.<patch>" >&2; exit 1; }; GPG_TTY=$(tty) git tag -s "${ver}" -m "release ${ver}"; git tag -v "${ver}"
+    @ver="v$(cargo run -- --version)"; [[ "${ver}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "tag: version ${ver} is not v<major>.<minor>.<patch>" >&2; exit 1; }; GPG_TTY=$(tty) git tag -s "${ver}" -m "release ${ver}"; git tag -v "${ver}"
 
 # The tap clone's one source: its origin URL, which the clone and the remote
 # set-up both take, and the location its .gitignore entry names.

@@ -194,7 +194,7 @@ fn run() -> i32 {
             return 0;
         }
         Ok(Invocation::Version) => {
-            println!("laterm {}", env!("CARGO_PKG_VERSION"));
+            println!("{}", env!("CARGO_PKG_VERSION"));
             return 0;
         }
         // Forward-and-exit: dispatched before ANY other startup work. Read the
