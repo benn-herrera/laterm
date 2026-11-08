@@ -56,19 +56,20 @@ tag: _tag-clean
 
 # The tap clone's one source: its origin URL, which the clone and the remote
 # set-up both take, and the location its .gitignore entry names.
-TAP_DIR := "homebrew-laterm"
-TAP_URL := "git@github.com:benn-herrera/homebrew-laterm.git"
-[doc("set up the sibling Homebrew tap clone at homebrew-laterm/: clone it, or add the missing origin to a clone; leave a correct clone alone, refuse any other; one line says what was done")]
+TAP_DIR := "homebrew-tap"
+TAP_URL := "git@github.com:benn-herrera/homebrew-tap.git"
+TAP_FORMULA := "laterm"
+[doc("set up the sibling Homebrew tap clone at homebrew-tap/: clone it, or add the missing origin to a clone; leave a correct clone alone, refuse any other; one line says what was done")]
 tap:
-    @TAP_DIR="{{TAP_DIR}}" TAP_URL="{{TAP_URL}}" scripts/tap.sh
+    @TAP_URL="{{TAP_URL}}" TAP_DIR="{{TAP_DIR}}" TAP_FORMULA="{{TAP_FORMULA}}" scripts/tap.sh
 
 [doc("LIVE; NEEDS the tap clone, a pushed release: set the tap formula's v<version> tarball and sha256 and commit it there, pushing nothing; raise go.mod's go line if Go no longer supports it, uncommitted")]
 tap-update:
-    @TAP_DIR="{{TAP_DIR}}" scripts/tap-update.sh
+    @TAP_DIR="{{TAP_DIR}}" TAP_FORMULA="{{TAP_FORMULA}}" scripts/tap-update.sh
 
 [doc("LIVE; NEEDS brew and the tap clone; DESTRUCTIVE to this machine's brew install of laterm: reinstall it from a scratch formula over a tarball of the working tree's tracked files; the tap is untouched")]
 tap-local:
-    @TAP_DIR="{{TAP_DIR}}" scripts/tap-local.sh
+    @TAP_DIR="{{TAP_DIR}}" TAP_FORMULA="{{TAP_FORMULA}}" scripts/tap-local.sh
 
 
 ADJAGENT_VER := "0.15.0"

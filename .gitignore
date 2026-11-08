@@ -28,4 +28,4 @@ nohup.out
 .opencode-temp/
 
 # nested tap repo
-homebrew-laterm/
+homebrew-tap/
