@@ -28,37 +28,30 @@ on Windows supports imgcat.
 A terminal supporting none of the three protocols is rejected at startup. There
 is no Unicode text fallback.
 
-## Quick Start
+## Installation
 
-### Run from dist
+### Homebrew (macOS and Linux)
 
 ```bash
-# pick the binary for your platform
-./dist/laterm-aarch64-apple-darwin
-./dist/laterm-x86_64-pc-windows-gnu.exe
-./dist/laterm-x86_64-unknown-linux-gnu
+brew tap benn-herrera/tap
+brew install laterm
 ```
 
-on Mac: `make dequarantine` first
+The formula builds laterm from the tagged release's source and puts it on `PATH`, with the tools it
+needs; see [benn-herrera/tap](https://github.com/benn-herrera/homebrew-tap)
+
+### Windows
+
+No binary is distributed for Windows. Build it from source.
+
 
 ### Build from source
 
 ```bash
 git clone https://github.com/ave-veritas-et-enodatio/laterm.git
 cd laterm
-make dist       # cross-build the per-platform binaries into dist/
-make install    # copy the right one to ~/.local/bin/laterm
+just build
 ```
-
-`make install` selects the binary for your OS from `dist/`, copies it to
-`~/.local/bin/laterm` (creating the directory if needed; override with
-`INSTALL_DIR=...`), and on macOS removes the
-quarantine attribute. It replaces any existing copy by removing it first (a
-fresh inode), which avoids a macOS code-signing cache quirk that otherwise
-`Killed:9`s an overwritten binary. Run `make dist` first so `dist/` is current.
-
-Alternatively, `make release` writes a single `target/release/laterm`; copy or
-symlink that onto your `PATH` yourself.
 
 Open a second terminal window (kitty, ghostty, iTerm2, WezTerm, Windows Terminal,
 or any Sixel-capable terminal), `cd` to the
