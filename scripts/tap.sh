@@ -55,9 +55,9 @@ if ! origin="$(git -C "${TAP_DIR}" remote get-url origin 2> /dev/null)"; then
 fi
 
 if [[ "${origin}" != "${TAP_URL}" ]]; then
-    printf 'tap: %s already has origin %s, not %s — refused, nothing was changed.\n' \
+    printf 'tap: %s already has origin %s, not %s — nothing was changed.\n' \
         "${TAP_DIR}" "${origin}" "${TAP_URL}" >&2
-    exit 1
+    exit 0
 fi
 
 printf 'tap: %s is already set up (origin %s) — nothing was changed\n' "${TAP_DIR}" "${origin}"

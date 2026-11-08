@@ -31,7 +31,7 @@ done
 lang=$(awk -F\" '/^[ \t]*depends_on/ { print $2; exit(0); }' "${src}")
 case "${lang}" in
   rust) ver=v"$(cargo run -- --version)";;
-  go) ver=v"$(go run cmd --version)";;
+  go) ver=v"$(go run ./cmd --version)";;
   *) printf '%s not supported. only go and rust.\n' "${lang}" 1>&2; exit 1;;
 esac
 tarball="${PWD}/bin/tap/${ver}.tar.gz"
@@ -41,7 +41,7 @@ mkdir -p "${PWD}/bin/tap"
 git ls-files -z | tar -czf "${tarball}" --null -T - -s ",^,${ver}/,"
 sha="$(shasum -a 256 "${tarball}" | cut -d' ' -f1)"
 cp "${src}" "${formula}"
-scripts/tap-formula-set.sh "${formula}" "file://${tarball}" "${sha}"
+"${script_dir}"/tap-formula-set.sh "${formula}" "file://${tarball}" "${sha}"
 
 # `brew list --versions` prints nothing and fails only when ${TAP_FORMULA} is not installed.
 if [[ -n "$(brew list --versions ${TAP_FORMULA} || true)" ]]; then
