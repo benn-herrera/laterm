@@ -71,16 +71,17 @@ tap-update:
 tap-local:
     @TAP_DIR="{{TAP_DIR}}" TAP_FORMULA="{{TAP_FORMULA}}" scripts/tap-local.sh
 
-
-ADJAGENT_VER := "0.15.0"
+DEVPRO_VER := "0.17.0"
 VENV := justfile_dir() / ".venv"
 PYTHON := "\"" + VENV + "/bin/python" + "\""
-ADJAGENT := "\"" + VENV + "/bin/adjagent" + "\""
+DEVPRO := "\"" + VENV + "/bin/devpro" + "\""
 agents:
   #!/usr/bin/env bash
   set -euo pipefail
-  [[ -x {{PYTHON}} ]] || python3 -m venv "{{VENV}}"
-  [[ -x {{ADJAGENT}} && "$({{ADJAGENT}} --version)" == "{{ADJAGENT_VER}}" ]] || \
-    {{PYTHON}} -m pip install --upgrade pip "git+https://github.com/benn-herrera/adjagent@v{{ADJAGENT_VER}}"
-  {{ADJAGENT}} install . --harness=claude
-  {{ADJAGENT}} install . --harness=opencode
+  [[ -x {{PYTHON}} ]] || python3 -m venv --upgrade-deps "{{VENV}}"
+  [[ -x {{DEVPRO}} && "$({{DEVPRO}} --version)" == "{{DEVPRO_VER}}" ]] || \
+    {{PYTHON}} -m pip install "git+https://github.com/benn-herrera/devpro@v{{DEVPRO_VER}}"
+  {{DEVPRO}} install . --harness=opencode
+  {{DEVPRO}} install . --harness=claude
+
+import? '.opencode/plugins/devpro/skills/docdicer/tools/runner-snippets/docdicer.just'

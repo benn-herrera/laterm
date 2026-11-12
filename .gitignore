@@ -26,6 +26,11 @@ nohup.out
 .claude-temp/
 .opencode/
 .opencode-temp/
+backup.*
+
+.venv/
+__pycache__/
+
 
 # nested tap repo
 homebrew-tap/

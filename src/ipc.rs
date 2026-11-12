@@ -20,7 +20,7 @@ use std::path::{Path, PathBuf};
 ///
 /// Rule: every character NOT in `[A-Za-z0-9]` maps 1:1 to `-` (no collapsing). This
 /// must track Claude Code's own project-dir naming convention byte-for-byte — e.g.
-/// `/Users/benn/projects/agent_convos/ai-race` →
+/// `/Users/agent-user/projects/agent_convos/ai-race` →
 /// `-Users-benn-projects-agent-convos-ai-race` (note the `_` becomes `-`) and, on
 /// Windows, `C:\Users\benn\projects\laterm` → `C--Users-benn-projects-laterm`. If
 /// Claude Code ever diverges (e.g. unicode/edge chars), revisit this. It is the ONE
@@ -215,7 +215,7 @@ mod tests {
     #[test]
     fn socket_file_deterministic_and_shares_mangling() {
         let base = Path::new("/run/user/1000");
-        let cwd = Path::new("/Users/benn/projects/laterm");
+        let cwd = Path::new("/Users/agent-user/projects/laterm");
         let a = socket_file(base, cwd);
         let b = socket_file(base, cwd);
         assert_eq!(a, b, "same base+cwd must yield the same socket path");
@@ -230,7 +230,7 @@ mod tests {
     #[test]
     fn mangle_dir_replaces_separators() {
         assert_eq!(
-            mangle_dir(Path::new("/Users/benn/projects/laterm")),
+            mangle_dir(Path::new("/Users/agent-user/projects/laterm")),
             "-Users-benn-projects-laterm"
         );
         // Windows-style drive + backslashes map the same way (`:` and `\` -> `-`).
@@ -238,7 +238,7 @@ mod tests {
         // Every non-alphanumeric char maps to `-`, including `_` — this must match
         // Claude Code's project-dir naming (the catch-up log dir depends on it).
         assert_eq!(
-            mangle_dir(Path::new("/Users/benn/projects/agent_convos/ai-race")),
+            mangle_dir(Path::new("/Users/agent-user/projects/agent_convos/ai-race")),
             "-Users-benn-projects-agent-convos-ai-race"
         );
     }
@@ -309,14 +309,14 @@ mod uds_tests {
 
     #[test]
     fn transport_and_parser_compose() {
-        let cwd = "/Users/benn/projects/laterm";
+        let cwd = "/Users/agent-user/projects/laterm";
         let path = unique_socket("e2e");
         let _ = std::fs::remove_file(&path);
 
         let shutdown = Arc::new(AtomicBool::new(false));
         let rx = listen(&path, shutdown.clone()).expect("bind listener");
 
-        let payload = br#"{"hook_event_name":"Stop","cwd":"/Users/benn/projects/laterm","last_assistant_message":"the answer is 42"}"#;
+        let payload = br#"{"hook_event_name":"Stop","cwd":"/Users/agent-user/projects/laterm","last_assistant_message":"the answer is 42"}"#;
         send(&path, payload).expect("send Stop payload");
 
         let got = rx

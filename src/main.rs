@@ -743,8 +743,8 @@ mod tests {
 
     #[test]
     fn display_dir_collapses_under_home() {
-        let home = PathBuf::from("/Users/benn");
-        let dir = PathBuf::from("/Users/benn/.claude/projects/-Users-benn-projects-laterm");
+        let home = PathBuf::from("/Users/agent-user");
+        let dir = PathBuf::from("/Users/agent-user/.claude/projects/-Users-benn-projects-laterm");
         assert_eq!(
             display_dir(&dir, Some(&home)),
             "~/.claude/projects/-Users-benn-projects-laterm"
@@ -753,7 +753,7 @@ mod tests {
 
     #[test]
     fn display_dir_passes_through_outside_home() {
-        let home = PathBuf::from("/Users/benn");
+        let home = PathBuf::from("/Users/agent-user");
         let dir = PathBuf::from("/var/data/-x");
         assert_eq!(display_dir(&dir, Some(&home)), "/var/data/-x");
         assert_eq!(display_dir(&dir, None), "/var/data/-x");
@@ -761,8 +761,8 @@ mod tests {
 
     #[test]
     fn project_log_dir_uses_shared_mangling() {
-        let cwd = PathBuf::from("/Users/benn/projects/laterm");
-        let home = PathBuf::from("/Users/benn");
+        let cwd = PathBuf::from("/Users/agent-user/projects/laterm");
+        let home = PathBuf::from("/Users/agent-user");
         let dir = project_log_dir(&cwd, &home);
         // The dir name is exactly the shared socket-mangling of the cwd, so the
         // log dir and the rendezvous socket agree by construction.

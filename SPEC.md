@@ -75,9 +75,9 @@ Three properties drive requirements elsewhere:
 character not in `[A-Za-z0-9]` with `-`, one for one:
 
 ```
-/Users/benn/projects/laterm          ->  -Users-benn-projects-laterm
-/Users/benn/projects/agent_convos/x  ->  -Users-benn-projects-agent-convos-x
-C:\Users\benn\projects\laterm        ->  C--Users-benn-projects-laterm
+/Users/agent-user/projects/laterm          ->  -Users-agent-user-projects-laterm
+/Users/agent-user/projects/agent_convos/x  ->  -Users-agent-user-projects-agent-convos-x
+C:\Users\agent-user\projects\laterm        ->  C--Users-agent-user-projects-laterm
 ```
 
 Note `_` → `-`: the rule is *not* "path separators only."

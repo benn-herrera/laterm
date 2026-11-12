@@ -74,11 +74,11 @@ pub(crate) fn parse(bytes: &[u8], watched_cwd: &str) -> Option<Parsed> {
 mod tests {
     use super::*;
 
-    const CWD: &str = "/Users/benn/projects/laterm";
+    const CWD: &str = "/Users/agent-user/projects/laterm";
 
     #[test]
     fn user_prompt_submit_parses_to_user() {
-        let p = br#"{"hook_event_name":"UserPromptSubmit","cwd":"/Users/benn/projects/laterm","prompt":"what is $x$?"}"#;
+        let p = br#"{"hook_event_name":"UserPromptSubmit","cwd":"/Users/agent-user/projects/laterm","prompt":"what is $x$?"}"#;
         assert_eq!(
             parse(p, CWD),
             Some(Parsed {
@@ -91,7 +91,7 @@ mod tests {
 
     #[test]
     fn stop_parses_to_assistant() {
-        let p = br#"{"hook_event_name":"Stop","cwd":"/Users/benn/projects/laterm","last_assistant_message":"the answer is $y$"}"#;
+        let p = br#"{"hook_event_name":"Stop","cwd":"/Users/agent-user/projects/laterm","last_assistant_message":"the answer is $y$"}"#;
         assert_eq!(
             parse(p, CWD),
             Some(Parsed {
@@ -105,21 +105,21 @@ mod tests {
     #[test]
     fn unrecognized_event_is_none() {
         let p =
-            br#"{"hook_event_name":"PreToolUse","cwd":"/Users/benn/projects/laterm","prompt":"x"}"#;
+            br#"{"hook_event_name":"PreToolUse","cwd":"/Users/agent-user/projects/laterm","prompt":"x"}"#;
         assert_eq!(parse(p, CWD), None);
     }
 
     #[test]
     fn empty_content_is_none() {
-        let user = br#"{"hook_event_name":"UserPromptSubmit","cwd":"/Users/benn/projects/laterm","prompt":""}"#;
+        let user = br#"{"hook_event_name":"UserPromptSubmit","cwd":"/Users/agent-user/projects/laterm","prompt":""}"#;
         assert_eq!(parse(user, CWD), None);
-        let stop = br#"{"hook_event_name":"Stop","cwd":"/Users/benn/projects/laterm","last_assistant_message":""}"#;
+        let stop = br#"{"hook_event_name":"Stop","cwd":"/Users/agent-user/projects/laterm","last_assistant_message":""}"#;
         assert_eq!(parse(stop, CWD), None);
     }
 
     #[test]
     fn missing_content_field_is_none() {
-        let p = br#"{"hook_event_name":"UserPromptSubmit","cwd":"/Users/benn/projects/laterm"}"#;
+        let p = br#"{"hook_event_name":"UserPromptSubmit","cwd":"/Users/agent-user/projects/laterm"}"#;
         assert_eq!(parse(p, CWD), None);
     }
 
@@ -144,8 +144,8 @@ mod tests {
 
     #[test]
     fn payload_cwd_extracts_cwd() {
-        let p = br#"{"hook_event_name":"Stop","cwd":"/Users/benn/projects/laterm","last_assistant_message":"hi"}"#;
-        assert_eq!(payload_cwd(p), Some("/Users/benn/projects/laterm".into()));
+        let p = br#"{"hook_event_name":"Stop","cwd":"/Users/agent-user/projects/laterm","last_assistant_message":"hi"}"#;
+        assert_eq!(payload_cwd(p), Some("/Users/agent-user/projects/laterm".into()));
         // Absent/empty cwd and malformed JSON yield None (no socket to rendezvous).
         assert_eq!(payload_cwd(br#"{"hook_event_name":"Stop"}"#), None);
         assert_eq!(payload_cwd(br#"{"cwd":""}"#), None);
