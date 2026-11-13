@@ -56,20 +56,19 @@ tag: _tag-clean
 
 # The tap clone's one source: its origin URL, which the clone and the remote
 # set-up both take, and the location its .gitignore entry names.
-TAP_DIR := "homebrew-tap"
-TAP_URL := "git@github.com:benn-herrera/homebrew-tap.git"
+HOSTED_TAP_DIR := "homebrew-tap"
 TAP_FORMULA := "laterm"
-[doc("set up the sibling Homebrew tap clone at homebrew-tap/: clone it, or add the missing origin to a clone; leave a correct clone alone, refuse any other; one line says what was done")]
-tap:
-    @TAP_URL="{{TAP_URL}}" TAP_DIR="{{TAP_DIR}}" TAP_FORMULA="{{TAP_FORMULA}}" scripts/tap.sh
+[doc("set up the sibling Homebrew tap clone at homebrew-tap/ - can't be used directly from here (chicken and egg")]
+tap-repo:
+  @TAP_DIR="{{HOSTED_TAP_DIR}}" scripts/tap-repo.sh
 
-[doc("LIVE; NEEDS the tap clone, a pushed release: set the tap formula's v<version> tarball and sha256 and commit it there, pushing nothing; raise go.mod's go line if Go no longer supports it, uncommitted")]
+[doc("LIVE; NEEDS the tap clone, a pushed release: set the tap formula's v<version> tarball and sha256 and commit it there")]
 tap-update:
-    @TAP_DIR="{{TAP_DIR}}" TAP_FORMULA="{{TAP_FORMULA}}" scripts/tap-update.sh
+  @just --justfile "{{HOSTED_TAP_DIR}}/scripts/justfile" TAP_FORMULA={{TAP_FORMULA}} tap-update
 
-[doc("LIVE; NEEDS brew and the tap clone; DESTRUCTIVE to this machine's brew install of laterm: reinstall it from a scratch formula over a tarball of the working tree's tracked files; the tap is untouched")]
+[doc("LIVE; NEEDS brew and the tap clone; DESTRUCTIVE to this machine's brew install of devpro: reinstall it from a scratch formula over a tarball of the working tree's tracked files")]
 tap-local:
-    @TAP_DIR="{{TAP_DIR}}" TAP_FORMULA="{{TAP_FORMULA}}" scripts/tap-local.sh
+  @just --justfile "{{HOSTED_TAP_DIR}}/scripts/justfile" TAP_FORMULA={{TAP_FORMULA}} tap-local
 
 DEVPRO_VER := "0.17.0"
 VENV := justfile_dir() / ".venv"
