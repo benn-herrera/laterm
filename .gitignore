@@ -16,6 +16,7 @@
 build/
 lib/
 bin/
+dist/
 # rust build output
 target/
 nohup.out
